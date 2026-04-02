@@ -48,8 +48,8 @@ defmodule Cabbage.Mixfile do
   defp deps do
     [
       {:gherkin, "~> 2.0"},
-      {:ex_doc, "~> 0.19", only: :dev},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:ex_doc, "~> 0.40", only: :dev},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
