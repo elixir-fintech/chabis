@@ -224,30 +224,14 @@ defmodule Cabbage.Feature do
             {:ok,
              Map.merge(
                Cabbage.Feature.Helpers.fetch_state(unquote(scenario.name), __MODULE__),
-               context || %{}
+               Cabbage.Feature.Helpers.to_map(context)
              )}
           end
 
           tags = Cabbage.Feature.Helpers.map_tags(scenario.tags) || []
 
           name =
-            if function_exported?(ExUnit.Case, :register_test, 6) do
-              apply(ExUnit.Case, :register_test, [
-                __ENV__.module,
-                __ENV__.file,
-                __ENV__.line,
-                :scenario,
-                scenario.name,
-                tags
-              ])
-            else
-              apply(ExUnit.Case, :register_test, [
-                __ENV__,
-                :scenario,
-                scenario.name,
-                tags
-              ])
-            end
+            Cabbage.Feature.Helpers.register_test(__ENV__, :scenario, scenario.name, tags)
 
           def unquote(name)(exunit_state) do
             Cabbage.Feature.Helpers.start_state(unquote(scenario.name), __MODULE__, exunit_state)
