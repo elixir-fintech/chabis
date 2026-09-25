@@ -1,7 +1,6 @@
 # Cabbage
 
-[![Coverage Status](https://coveralls.io/repos/github/cabbage-ex/cabbage/badge.svg?branch=master)](https://coveralls.io/github/cabbage-ex/cabbage?branch=master)
-[![CircleCI](https://circleci.com/gh/cabbage-ex/cabbage.svg?style=svg)](https://circleci.com/gh/cabbage-ex/cabbage)
+[![CI](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml/badge.svg)](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml)
 [![Hex.pm](https://img.shields.io/hexpm/v/cabbage.svg)]()
 
 <img src="https://www.organicfacts.net/wp-content/uploads/2013/12/redcabbage.jpg" width="240px" height="180px"></img>

@@ -94,6 +94,18 @@ defmodule Cabbage.Feature.Helpers do
     end
   end
 
+  def to_map(value) when is_map(value), do: value
+  def to_map(value) when is_list(value), do: Map.new(value)
+  def to_map(nil), do: %{}
+
+  def register_test(env, test_type, name, tags) do
+    if function_exported?(ExUnit.Case, :register_test, 6) do
+      apply(ExUnit.Case, :register_test, [env.module, env.file, env.line, test_type, name, tags])
+    else
+      apply(ExUnit.Case, :register_test, [env, test_type, name, tags])
+    end
+  end
+
   def map_tags(tags) do
     tags
     |> Enum.map(fn
