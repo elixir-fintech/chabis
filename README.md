@@ -1,22 +1,26 @@
 # Cabbage
 
 [![CI](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml/badge.svg)](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml)
-[![Hex.pm](https://img.shields.io/hexpm/v/cabbage.svg)]()
 
-<img src="https://www.organicfacts.net/wp-content/uploads/2013/12/redcabbage.jpg" width="240px" height="180px"></img>
-##### (Looking contribution for a better icon!)
+A simple addon on top of [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) which provides compile time translation of `.feature` files to exunit tests. 
 
-A simple addon on top of [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) which provides compile time translation of `.feature` files to exunit tests. Big thanks to [@meadsteve](https://github.com/meadsteve) and the [White Bread](https://github.com/meadsteve/white-bread) project for a huge head start on this project.
+It's a fork from [https://github.com/cabbage-ex/cabbage](https://github.com/cabbage-ex/cabbage)
+
+
+Takes care of
+- ExUnit.Case.register_test/4 deprecation warning for elixir >= 1.17
+- ExUnit API changes while still supporting 1.13 - 1.19
+- Various compilation warnings by bumping ex_doc and excoveralls
 
 ## Installation
 
-[Available in Hex](https://hex.pm/packages/cabbage), the package can be installed as:
+The package can be installed as:
 
   1. Add `cabbage` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:cabbage, "~> 0.4.0"}]
+  [{:cabbage, github: "elixir-fintech/cabbage"}]
 end
 ```
 
@@ -122,42 +126,3 @@ Typically to run an ExUnit test you would do something like `mix test test/some_
 
     # Runs scenario of test/features/coffee.feature on line 13
     mix test test/feature_test.exs:13
-
-# Developing
-
-## Using Docker Compose
-
-A `docker-compose.yml` is provided for running the tests in containers.
-
-```shell
-$ docker-compose up
-```
-
-To wipe all `_build` and `deps` you can run:
-```shell
-$ docker-compose down -v
-```
-
-If you want to interactive, using standard `mix` commands, such as updating dependencies:
-
-```shell
-$ docker-compose run --rm test deps.update --all
-```
-
-Or, if you want to run a single test, that can be accomplished with:
-
-```shell
-$ docker-compose run --rm cabbage test test/feature_test.exs
-```
-
-# Roadmap
-
-- [x] Scenarios
-- [x] Scenario Outlines
-- [x] ExUnit Case Templates
-- [x] Data tables
-- [x] Executing specific tests
-- [x] Tags implementation
-- [ ] Background steps
-- [ ] Integration Helpers for Wallaby (separate project?)
-- [ ] Integration Helpers for Hound (separate project?)
