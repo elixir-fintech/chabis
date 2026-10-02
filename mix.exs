@@ -8,8 +8,8 @@ defmodule Chabis.MixProject do
       app: :chabis,
       version: @version,
       elixir: "~> 1.13",
-      source_url: "https://github.com/elixir-fintech/cabbage",
-      homepage_url: "https://github.com/elixir-fintech/cabbage",
+      source_url: "https://github.com/elixir-fintech/chabis",
+      homepage_url: "https://github.com/elixir-fintech/chabis",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -57,7 +57,7 @@ defmodule Chabis.MixProject do
     [
       maintainers: ["Christian Sommerauer"],
       licenses: ["MIT"],
-      links: %{github: "https://github.com/elixir-fintech/cabbage"}
+      links: %{github: "https://github.com/elixir-fintech/chabis"}
     ]
   end
 

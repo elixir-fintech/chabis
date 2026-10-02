@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased (0.5.0)
+### Unreleased (0.5.1)
 
 - **Breaking:** Renamed the package and OTP application from `cabbage` to `chabis`, and all modules
   from `Cabbage.*` to `Chabis.*`. Migration for consumers:
@@ -9,6 +9,9 @@
   - `config :cabbage, ...` → `config :chabis, ...`
 - Christian Sommerauer is now the package maintainer (upstream authors remain credited in the
   README and LICENSE).
+- The GitHub repository was renamed to [elixir-fintech/chabis](https://github.com/elixir-fintech/chabis).
+  GitHub redirects the old `elixir-fintech/cabbage` URL, so existing clones and dependency
+  references keep working, but updating them is recommended.
 
 - Fixed `import_steps/1` and `import_tags/1`: importing from a module that is not compiled, or does
   not `use Chabis.Feature`, now raises a descriptive compile-time error. Previously the
