@@ -1,6 +1,6 @@
 # Chabis
 
-[![CI](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml/badge.svg)](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml)
+[![CI](https://github.com/elixir-fintech/chabis/actions/workflows/ci.yml/badge.svg)](https://github.com/elixir-fintech/chabis/actions/workflows/ci.yml)
 
 A simple addon on top of [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) which provides compile time translation of `.feature` files to exunit tests. 
 
@@ -20,7 +20,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:cabbage, github: "elixir-fintech/cabbage", tag: "v0.5.1"}]
+  [{:chabis, github: "elixir-fintech/chabis"}]
 end
 ```
 
