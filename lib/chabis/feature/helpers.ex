@@ -1,4 +1,4 @@
-defmodule Cabbage.Feature.Helpers do
+defmodule Chabis.Feature.Helpers do
   @moduledoc false
   require Logger
 
@@ -10,7 +10,7 @@ defmodule Cabbage.Feature.Helpers do
   end
 
   defp to_regex_ast(term) when is_binary(term) do
-    regex_string = Cabbage.Feature.CucumberExpression.to_regex_string(term)
+    regex_string = Chabis.Feature.CucumberExpression.to_regex_string(term)
     Code.string_to_quoted!("~r/#{regex_string}/")
   end
 
@@ -21,6 +21,64 @@ defmodule Cabbage.Feature.Helpers do
   def add_tag(module, tag_name, block) do
     Module.put_attribute(module, :tags, {tag_name, block})
     quote(do: nil)
+  end
+
+  @doc """
+  Imports all step definitions from `module` into `target`.
+
+  Raises a descriptive error at compile time when `module` is not compiled or
+  does not `use Chabis.Feature`. The previous implementation called
+  `Code.ensure_compiled/1` as an `if` guard, which never guarded because both
+  `{:module, _}` and `{:error, _}` are truthy, and later failed with a cryptic
+  `UndefinedFunctionError`.
+  """
+  def import_steps(target, module) do
+    with {:module, _} <- Code.ensure_compiled(module),
+         true <- function_exported?(module, :raw_steps, 0) do
+      for step <- module.raw_steps() do
+        Module.put_attribute(target, :steps, step)
+      end
+
+      :ok
+    else
+      {:error, reason} ->
+        raise ArgumentError, import_error(:steps, module, "it is not available (#{inspect(reason)})")
+
+      false ->
+        raise ArgumentError, import_error(:steps, module, "it does not `use Chabis.Feature`")
+    end
+  end
+
+  @doc """
+  Imports all tag definitions from `module` into `target`.
+
+  Raises a descriptive error at compile time when `module` is not compiled or
+  does not `use Chabis.Feature`.
+  """
+  def import_tags(target, module) do
+    with {:module, _} <- Code.ensure_compiled(module),
+         true <- function_exported?(module, :raw_tags, 0) do
+      for {name, block} <- module.raw_tags() do
+        add_tag(target, name, block)
+      end
+
+      :ok
+    else
+      {:error, reason} ->
+        raise ArgumentError, import_error(:tags, module, "it is not available (#{inspect(reason)})")
+
+      false ->
+        raise ArgumentError, import_error(:tags, module, "it does not `use Chabis.Feature`")
+    end
+  end
+
+  defp import_error(kind, module, reason) do
+    """
+    cannot import #{kind} from #{inspect(module)}: #{reason}
+
+    Make sure the module is compiled before it is imported. Shared feature modules must be placed \
+    in a compiled path, such as "test/support" (see `elixirc_paths` in your mix.exs).
+    """
   end
 
   def evaluate_tag_block(block) do
@@ -47,7 +105,7 @@ defmodule Cabbage.Feature.Helpers do
   end
 
   def agent_name(scenario_name, module_name) do
-    :"cabbage_integration_test-#{scenario_name}-#{module_name}"
+    :"chabis_integration_test-#{scenario_name}-#{module_name}"
   end
 
   @keys ~w(async case describe file integration line test type scenario case_templae registered)a
@@ -84,7 +142,7 @@ defmodule Cabbage.Feature.Helpers do
 
     case Enum.find(tags, &match?({^string_tag, _}, &1)) do
       {^string_tag, block} ->
-        Logger.debug("Cabbage: Running tag @#{tag}...")
+        Logger.debug("Chabis: Running tag @#{tag}...")
         state = evaluate_tag_block(block)
         start_state(scenario_name, module, state)
 
