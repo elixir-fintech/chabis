@@ -20,7 +20,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:cabbage, github: "elixir-fintech/cabbage"}]
+  [{:cabbage, github: "elixir-fintech/cabbage", tag: "v0.5.1"}]
 end
 ```
 
