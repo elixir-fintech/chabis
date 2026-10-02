@@ -1,5 +1,27 @@
 # Changelog
 
+### Unreleased (0.5.0)
+
+- **Breaking:** Renamed the package and OTP application from `cabbage` to `chabis`, and all modules
+  from `Cabbage.*` to `Chabis.*`. Migration for consumers:
+  - `{:cabbage, github: "elixir-fintech/cabbage"}` → `{:chabis, ...}` dependency
+  - `use Cabbage.Feature` → `use Chabis.Feature`
+  - `config :cabbage, ...` → `config :chabis, ...`
+- Christian Sommerauer is now the package maintainer (upstream authors remain credited in the
+  README and LICENSE).
+
+- Fixed `import_steps/1` and `import_tags/1`: importing from a module that is not compiled, or does
+  not `use Chabis.Feature`, now raises a descriptive compile-time error. Previously the
+  `Code.ensure_compiled/1` guard never actually guarded (all of its return values are truthy) and the
+  failure surfaced later as a cryptic `UndefinedFunctionError`.
+- Fixed project metadata (`source_url`, `homepage_url` and package links) to point at this fork
+  instead of the upstream repository.
+- Removed the stale CircleCI configuration (superseded by GitHub Actions; it contained a committed
+  Coveralls token that should be revoked) and the outdated `docker-compose.yml` (pinned Elixir 1.4).
+- Fixed broken links in the README (tables/doc strings example, running specific tests).
+- Ignored `tmp/`, where the test helper writes `.beam` files.
+- Moved CI from CircleCI to GitHub Actions, testing Elixir 1.13 through 1.19 (previously unrecorded).
+
 ### v0.4.1
 
 - Updated dependencies, remove dependency on retired `gherkin 1.6.1`

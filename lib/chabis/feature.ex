@@ -1,4 +1,4 @@
-defmodule Cabbage.Feature do
+defmodule Chabis.Feature do
   @moduledoc """
   An extension on ExUnit to be able to execute feature files.
 
@@ -6,21 +6,21 @@ defmodule Cabbage.Feature do
 
   In `config/test.exs`
 
-      config :cabbage,
+      config :chabis,
         # Default is "test/features/"
         features: "my/path/to/features/"
         # Default is []
         global_tags: :integration
 
   - `features` - Allows you to specify the location of your feature files. They can be anywhere, but typically are located within the test folder.
-  - `global_tags` - Allow you to specify ex unit tag assigned to all cabbage generated tests
+  - `global_tags` - Allow you to specify ex unit tag assigned to all chabis generated tests
 
   ## Features
 
   Given a feature file, create a corresponding feature module which references it. Heres an example:
 
       defmodule MyApp.SomeFeatureTest do
-        use Cabbage.Feature, file: "some_feature.feature"
+        use Chabis.Feature, file: "some_feature.feature"
 
         defgiven ~r/I am given a given statement/, _matched_data, _current_state do
           assert 1 + 1 == 2
@@ -106,15 +106,15 @@ defmodule Cabbage.Feature do
   If you're using Phoenix, this should already be setup for you. Simply place a file like the following into `test/support`.
 
       defmodule MyApp.GlobalFeatures do
-        use Cabbage.Feature
+        use Chabis.Feature
 
         # Write your `defgiven/4`, `defthen/4` and `defwhen/4`s here
       end
 
-  Then inside the test file (the .exs one) add a `import_feature MyApp.GlobalFeatures` line after the `use Cabbage.Feature` line lke so:
+  Then inside the test file (the .exs one) add a `import_feature MyApp.GlobalFeatures` line after the `use Chabis.Feature` line lke so:
 
       defmodule MyApp.SomeFeatureTest do
-        use Cabbage.Feature, file: "some_feature.feature"
+        use Chabis.Feature, file: "some_feature.feature"
         import_feature MyApp.GlobalFeatures
 
         # Omitted the rest
@@ -122,9 +122,9 @@ defmodule Cabbage.Feature do
 
   Keep in mind that if you'd like to be more explicit about what you bring into your test, you can use the macros `import_steps/1` and `import_tags/1`. This will allow you to be more selective about whats getting included into your integration tests. The `import_feature/1` macro simply calls both the `import_steps/1` and `import_tags/1` macros.
   """
-  import Cabbage.Feature.Helpers
+  import Chabis.Feature.Helpers
 
-  alias Cabbage.Feature.{Loader, MissingStepError}
+  alias Chabis.Feature.{Loader, MissingStepError}
 
   @feature_options [:file, :template]
   defmacro __using__(options) do
@@ -190,7 +190,7 @@ defmodule Cabbage.Feature do
         Map.put(
           scenario,
           :tags,
-          Cabbage.global_tags() ++ List.wrap(Module.get_attribute(env.module, :moduletag)) ++ scenario.tags
+          Chabis.global_tags() ++ List.wrap(Module.get_attribute(env.module, :moduletag)) ++ scenario.tags
         )
 
       quote bind_quoted: [
@@ -204,7 +204,7 @@ defmodule Cabbage.Feature do
             for tag <- unquote(scenario.tags) do
               case tag do
                 {tag, _value} ->
-                  Cabbage.Feature.Helpers.run_tag(
+                  Chabis.Feature.Helpers.run_tag(
                     unquote(Macro.escape(tags)),
                     tag,
                     __MODULE__,
@@ -212,7 +212,7 @@ defmodule Cabbage.Feature do
                   )
 
                 tag ->
-                  Cabbage.Feature.Helpers.run_tag(
+                  Chabis.Feature.Helpers.run_tag(
                     unquote(Macro.escape(tags)),
                     tag,
                     __MODULE__,
@@ -223,18 +223,18 @@ defmodule Cabbage.Feature do
 
             {:ok,
              Map.merge(
-               Cabbage.Feature.Helpers.fetch_state(unquote(scenario.name), __MODULE__),
-               Cabbage.Feature.Helpers.to_map(context)
+               Chabis.Feature.Helpers.fetch_state(unquote(scenario.name), __MODULE__),
+               Chabis.Feature.Helpers.to_map(context)
              )}
           end
 
-          tags = Cabbage.Feature.Helpers.map_tags(scenario.tags) || []
+          tags = Chabis.Feature.Helpers.map_tags(scenario.tags) || []
 
           name =
-            Cabbage.Feature.Helpers.register_test(__ENV__, :scenario, scenario.name, tags)
+            Chabis.Feature.Helpers.register_test(__ENV__, :scenario, scenario.name, tags)
 
           def unquote(name)(exunit_state) do
-            Cabbage.Feature.Helpers.start_state(unquote(scenario.name), __MODULE__, exunit_state)
+            Chabis.Feature.Helpers.start_state(unquote(scenario.name), __MODULE__, exunit_state)
 
             unquote(Enum.map(scenario.steps, &compile_step(&1, steps, scenario.name)))
           end
@@ -266,14 +266,14 @@ defmodule Cabbage.Feature do
     quote generated: true do
       with {_type, unquote(vars)} <- {:variables, unquote(Macro.escape(named_vars))},
            {_type, state = unquote(state_pattern)} <-
-             {:state, Cabbage.Feature.Helpers.fetch_state(unquote(scenario_name), __MODULE__)} do
+             {:state, Chabis.Feature.Helpers.fetch_state(unquote(scenario_name), __MODULE__)} do
         new_state =
           case unquote(block) do
             {:ok, new_state} -> Map.merge(state, new_state)
             _ -> state
           end
 
-        Cabbage.Feature.Helpers.update_state(unquote(scenario_name), __MODULE__, fn _ ->
+        Chabis.Feature.Helpers.update_state(unquote(scenario_name), __MODULE__, fn _ ->
           new_state
         end)
 
@@ -290,10 +290,10 @@ defmodule Cabbage.Feature do
           metadata = unquote(Macro.escape(metadata))
 
           reraise """
-                  ** (MatchError) Failure to match #{type} of #{inspect(Cabbage.Feature.Helpers.remove_hidden_state(state))}
+                  ** (MatchError) Failure to match #{type} of #{inspect(Chabis.Feature.Helpers.remove_hidden_state(state))}
                   Pattern: #{unquote(Macro.to_string(state_pattern))}
                   """,
-                  Cabbage.Feature.Helpers.stacktrace(__MODULE__, metadata)
+                  Chabis.Feature.Helpers.stacktrace(__MODULE__, metadata)
       end
     end
   end
@@ -318,7 +318,7 @@ defmodule Cabbage.Feature do
   end
 
   @doc """
-  Brings in all the functionality available from the supplied module. Module must `use Cabbage.Feature` (with or without a `:file`).
+  Brings in all the functionality available from the supplied module. Module must `use Chabis.Feature` (with or without a `:file`).
 
   Same as calling both `import_steps/1` and `import_tags/1`.
   """
@@ -330,28 +330,24 @@ defmodule Cabbage.Feature do
   end
 
   @doc """
-  Brings in all the step definitions from the supplied module. Module must `use Cabbage.Feature` (with or without a `:file`).
+  Brings in all the step definitions from the supplied module. Module must `use Chabis.Feature` (with or without a `:file`).
+
+  Raises at compile time when the module is not compiled or does not `use Chabis.Feature`.
   """
   defmacro import_steps(module) do
     quote do
-      if Code.ensure_compiled(unquote(module)) do
-        for step <- unquote(module).raw_steps() do
-          Module.put_attribute(__MODULE__, :steps, step)
-        end
-      end
+      Chabis.Feature.Helpers.import_steps(__MODULE__, unquote(module))
     end
   end
 
   @doc """
-  Brings in all the tag definitions from the supplied module. Module must `use Cabbage.Feature` (with or without a `:file`).
+  Brings in all the tag definitions from the supplied module. Module must `use Chabis.Feature` (with or without a `:file`).
+
+  Raises at compile time when the module is not compiled or does not `use Chabis.Feature`.
   """
   defmacro import_tags(module) do
     quote do
-      if Code.ensure_compiled(unquote(module)) do
-        for {name, block} <- unquote(module).raw_tags() do
-          Cabbage.Feature.Helpers.add_tag(__MODULE__, name, block)
-        end
-      end
+      Chabis.Feature.Helpers.import_tags(__MODULE__, unquote(module))
     end
   end
 
@@ -369,12 +365,12 @@ defmodule Cabbage.Feature do
 
   @doc """
   Add an ExUnit `setup/1` callback that only fires for the scenarios that are tagged. Can be
-  used inside of `Cabbage.Feature`s that don't relate to a file and then imported with `import_feature/1`.
+  used inside of `Chabis.Feature`s that don't relate to a file and then imported with `import_feature/1`.
 
   Example usage:
 
       defmodule MyTest do
-        use Cabbage.Feature
+        use Chabis.Feature
 
         tag @some_tag do
           IO.puts "Do this before the @some_tag scenario"

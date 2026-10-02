@@ -18,3 +18,9 @@ erl_crash.dump
 
 .idea 
 *.iml
+
+.agent/
+opencode.json
+
+# .beam files compiled on demand by the test helper.
+/tmp

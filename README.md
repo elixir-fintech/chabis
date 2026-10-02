@@ -1,10 +1,10 @@
-# Cabbage
+# Chabis
 
 [![CI](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml/badge.svg)](https://github.com/elixir-fintech/cabbage/actions/workflows/ci.yml)
 
 A simple addon on top of [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) which provides compile time translation of `.feature` files to exunit tests. 
 
-It's a fork from [https://github.com/cabbage-ex/cabbage](https://github.com/cabbage-ex/cabbage)
+It's a fork of [cabbage-ex/cabbage](https://github.com/cabbage-ex/cabbage) — the `Cabbage.*` modules were renamed to `Chabis.*` for this package.
 
 
 Takes care of
@@ -16,7 +16,7 @@ Takes care of
 
 The package can be installed as:
 
-  1. Add `cabbage` to your list of dependencies in `mix.exs`:
+  1. Add `chabis` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -29,7 +29,7 @@ end
 By default, feature files are expected inside `test/features`. This can be configured within your application with the following:
 
 ```elixir
-config :cabbage, features: "some/other/path/from/your/project/root"
+config :chabis, features: "some/other/path/from/your/project/root"
 ```
 
 Inside `test/features/coffee.feature` you might have something like:
@@ -52,7 +52,7 @@ To translate this to a simple exunit test, all you need to do is provide the tra
 ```elixir
 defmodule MyApp.Features.CoffeeTest do
   # Options, other than file:, are passed directly to `ExUnit`
-  use Cabbage.Feature, async: false, file: "coffee.feature"
+  use Chabis.Feature, async: false, file: "coffee.feature"
 
   # `setup_all/1` provides a callback for doing something before the entire suite runs
   # As below, `setup/1` provides means of doing something prior to each scenario
@@ -118,11 +118,11 @@ This provides the best of both worlds. Feature files for non-technical users, an
 
 ### Tables & Doc Strings
 
-Using tables and Doc Strings can be done easily, they are provided through the variables under the names `:table` and `:doc_string`. An example can be seen in [test/data_tables_test.exs](test/data_tables_test.exs) and [test/features/data_tables.feature](test/features/data_tables.feature).
+Using tables and Doc Strings can be done easily, they are provided through the variables under the names `:table` and `:doc_string`. An example can be seen in [test/feature_execution_test.exs](test/feature_execution_test.exs) and [test/features/dynamic.feature](test/features/dynamic.feature).
 
 ### Running specific tests
 
 Typically to run an ExUnit test you would do something like `mix test test/some_test.exs:12` and elixir will automatically load  `test/some_test.exs` for you, but only run the test on line `12`. Since the feature files are being translated into ExUnit at compile time, you'll have to specify the `.exs` file and not the `.feature` file to run. The line numbers are printed out as each test runs (at the `:info` level, so you may need to increase your logger config if you dont see anything). An example is like as follows:
 
     # Runs scenario of test/features/coffee.feature on line 13
-    mix test test/feature_test.exs:13
+    mix test test/features/coffee_test.exs:13
