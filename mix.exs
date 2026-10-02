@@ -1,21 +1,21 @@
-defmodule Cabbage.Mixfile do
+defmodule Chabis.MixProject do
   use Mix.Project
 
   @version "0.5.1"
 
   def project do
     [
-      app: :cabbage,
+      app: :chabis,
       version: @version,
       elixir: "~> 1.13",
-      source_url: "git@github.com:elixir-fintech/cabbage.git",
-      homepage_url: "https://github.com/elixir-fintech/cabbage",
+      source_url: "https://github.com/elixir-fintech/chabis",
+      homepage_url: "https://github.com/elixir-fintech/chabis",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: "Story BDD tool for executing elixir in ExUnit",
       docs: [
-        main: Cabbage,
+        main: Chabis,
         readme: "README.md"
       ],
       package: package(),
@@ -55,9 +55,9 @@ defmodule Cabbage.Mixfile do
 
   defp package do
     [
-      maintainers: ["csommerauer"],
+      maintainers: ["Christian Sommerauer"],
       licenses: ["MIT"],
-      links: %{github: "https://github.com/elixir-fintech/cabbage"}
+      links: %{github: "https://github.com/elixir-fintech/chabis"}
     ]
   end
 
